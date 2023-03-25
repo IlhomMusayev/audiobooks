@@ -4,6 +4,7 @@ import {
   delete_category,
   get_categories,
   get_category_by_id,
+  update_category,
 } from "../controllers/category.controllers";
 import AuthMiddleware from "../middleware/authMiddleware";
 
@@ -118,4 +119,36 @@ categoryRouter.delete("/delete/:id", delete_category);
  *      - Category
  */
 categoryRouter.get("/get/:id", get_category_by_id);
+
+/**
+ * @openapi
+ * /categories/update/{category_id}:
+ *   post:
+ *     summary: Update category
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               category_name:
+ *                 type: string
+ *               category_name_translations:
+ *                 type: json
+ *             required:
+ *               - category_name
+ *               - category_name_translations
+ *     responses:
+ *       '200':
+ *         description: Category updated successful
+ *       '400':
+ *         description: Invalid request body
+ *       '500':
+ *         description: Internal server error
+ *     tags:
+ *      - Category
+ */
+categoryRouter.put("/update/:id", update_category);
+
 export default categoryRouter;

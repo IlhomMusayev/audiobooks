@@ -116,3 +116,61 @@ export const get_category_by_id: RequestHandler = async (req: Request, res: Resp
     next(error);
   }
 };
+
+// Update category controller
+export const update_category: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { category_name, category_name_translations }: any = await CategoryValidations.CreateCategoryValidation(
+      req.body
+    );
+
+    const category_id = req.params.id;
+
+    if (!(await check_uuid(category_id))) {
+      return res.status(400).json({ ok: false, message: "category_id is invalid" });
+    }
+
+    let category: any = await Category.findOne({
+      where: {
+        category_id,
+      },
+    });
+
+    if (!category) {
+      return res.status(200).json({
+        ok: false,
+        message: "Category doesn't exist",
+      });
+    }
+
+    const category_is_exist = await Category.findOne({
+      where: { category_name },
+    });
+    if (category_is_exist && category_is_exist.category_id !== category.category_id) {
+      return res.status(200).json({
+        ok: false,
+        message: "Category with this name is already exist",
+      });
+    }
+
+    await Category.update(
+      {
+        category_name,
+        category_name_translations,
+      },
+      {
+        where: {
+          category_id,
+        },
+      }
+    );
+
+    return res.status(200).json({
+      ok: true,
+      message: "category updated",
+      category,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
