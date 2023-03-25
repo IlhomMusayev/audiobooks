@@ -20,7 +20,7 @@ const options: swaggerJsdoc.Options = {
         },
       },
     },
-    servers: [{ url: "http://localhost:3000/v1/api" }],
+    servers: [{ url: "http://localhost:5005/v1/api" }],
     security: [{ jwt: [] }],
   },
   apis: ["./src/routes/*.route.ts"],

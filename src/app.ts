@@ -15,16 +15,9 @@ const app = express();
 try {
   app.use(json());
   app.use(urlencoded({ extended: true }));
-  app.use(
-    (
-      err: Error,
-      req: express.Request,
-      res: express.Response,
-      next: express.NextFunction
-    ) => {
-      res.status(500).json({ message: err.message });
-    }
-  );
+  app.use((err: Error, req: express.Request, res: express.Response, next: express.NextFunction) => {
+    res.status(500).json({ message: err.message });
+  });
   // app.use(errorMiddleware);
 
   sequelize.authenticate();
@@ -35,7 +28,7 @@ try {
     .then(() => {
       console.log("Database synced");
     })
-    .catch((error) => {
+    .catch((error: any) => {
       console.error("Error syncing database:", error);
     });
   Relations();
@@ -49,5 +42,5 @@ try {
   console.log(error);
 } finally {
   Routes(app);
-  swaggerDocs(app, 3000);
+  swaggerDocs(app, config.get("port"));
 }

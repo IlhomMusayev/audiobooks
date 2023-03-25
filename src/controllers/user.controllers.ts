@@ -10,14 +10,9 @@ import Sessions from "../models/sessions.model";
 import { Validations } from "../validation/user.validation";
 
 // Register user controller
-export const registerUser: RequestHandler = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const registerUser: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { phone_number }: any =
-      await Validations.RegisterPhoneNumberValidation(req.body);
+    const { phone_number }: any = await Validations.RegisterPhoneNumberValidation(req.body);
 
     const isUser = await User.findOne({
       where: { phone_number },
@@ -59,11 +54,7 @@ export const registerUser: RequestHandler = async (
 };
 
 // Confirm code controller
-export const confirmCode: RequestHandler = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const confirmCode: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
   try {
     // Validate request body
     const { hash }: any = await Validations.HashValidation(req.body);
@@ -130,14 +121,9 @@ export const confirmCode: RequestHandler = async (
 };
 
 // Resend code controller
-export const resendCode: RequestHandler = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const resendCode: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { phone_number }: any =
-      await Validations.RegisterPhoneNumberValidation(req.body);
+    const { phone_number }: any = await Validations.RegisterPhoneNumberValidation(req.body);
 
     // Get user
     const user = await User.findOne({
@@ -163,10 +149,7 @@ export const resendCode: RequestHandler = async (
       user_id: user.id,
     });
 
-    await sendSmsTo(
-      phone_number.slice(1),
-      `Tasdiqlash kodi ${genNumber}\n\nNaqshiyApp`
-    );
+    await sendSmsTo(phone_number.slice(1), `Tasdiqlash kodi ${genNumber}\n\nNaqshiyApp`);
 
     return res.status(200).json({
       token: token,
@@ -179,14 +162,9 @@ export const resendCode: RequestHandler = async (
   }
 };
 // Patch user profile controller
-export const patchUserProfile: RequestHandler = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const patchUserProfile: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { full_name, email, password }: any =
-      await Validations.PatchUserValidation(req.body);
+    const { full_name, email, password }: any = await Validations.PatchUserValidation(req.body);
 
     console.log(full_name, email, password);
   } catch (error) {
