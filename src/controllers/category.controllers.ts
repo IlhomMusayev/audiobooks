@@ -84,3 +84,35 @@ export const delete_category: RequestHandler = async (req: Request, res: Respons
     next(error);
   }
 };
+
+// Get category by category_id controller
+export const get_category_by_id: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const category_id = req.params.id;
+
+    if (!(await check_uuid(category_id))) {
+      return res.status(400).json({ ok: false, message: "category_id is invalid" });
+    }
+
+    const category: any = await Category.findOne({
+      where: {
+        category_id,
+      },
+    });
+
+    if (!category) {
+      return res.status(200).json({
+        ok: false,
+        message: "Category doesn't exist",
+      });
+    }
+
+    return res.status(200).json({
+      ok: true,
+      message: "Category by category_id",
+      category,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
