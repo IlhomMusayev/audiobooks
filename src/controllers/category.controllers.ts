@@ -1,9 +1,8 @@
 import { NextFunction, Request, RequestHandler, Response } from "express";
 import { CustomError } from "../helpers/CustomError";
 import Category from "../models/categories.model copy";
-import { isValidUUID } from "../utils/functions";
+import { check_uuid } from "../utils/functions";
 import { CategoryValidations } from "../validation/category.validation";
-const uuidValidate = require("uuid-validate");
 
 // Create category controller
 export const create_category: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
@@ -54,7 +53,7 @@ export const delete_category: RequestHandler = async (req: Request, res: Respons
   try {
     const category_id = req.params.id;
 
-    if (!uuidValidate(category_id)) {
+    if (!(await check_uuid(category_id))) {
       return res.status(400).json({ ok: false, message: "category_id is invalid" });
     }
 
